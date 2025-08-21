@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reporte de Guardia - PE7-127</title>
+
+  <!-- Librerías -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #ecf0f3;
+      color: #003366;
+    }
+    h1, h2 {
+      text-align: center;
+      margin: 6px 0;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .btn {
+      background-color: #f9cd00;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #002752;
+    }
+    #reporte {
+      width: 800px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2px;
+      font-size: 8px;
+    }
+    th, td {
+      border: 0.1px solid #aaa;
+      padding: 1px;
+      text-align: left;
+    }
+    th {
+      background-color: #dde6f3;
+    }
+    input, textarea {
+      width: 100%;
+      font-size: 8px;
+      border: none;
+      background: transparent;
+      color: #003366;
+    }
+    input:focus, textarea:focus {
+      outline: 2px solid #f9cd00;
+      background-color: #fffef5;
+    }
+    textarea {
+      resize: none;
+      overflow: hidden;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      min-height: 60px;
+    }
+    @media print {
+      body {
+        background: white;
+      }
+      #reporte {
+        width: auto;
+        margin: 0;
+        padding: 0;
+      }
+      .buttons {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>📋 GEOTEC - Reporte de Guardia</h1>
+  <h2>Máquina PE7-127</h2>
+
+  <div class="buttons">
+    <button class="btn" id="btnPDF">📄 PDF</button>
+    <button class="btn" id="btnExcel">📊 Excel</button>
+  </div>
+
+  <div id="reporte">
+
+    <div style="display:flex; align-items:center; width:100%; padding:4px 8px; border-bottom: #ccc">
+
+   <!-- 🧭 GEOTEC bien pegado a la izquierda -->
+  <div style="margin-right:auto">
+    <h2 style="font-size:20px; margin:0">GEOTEC</h2>
+  </div>
+  <!-- REPORTE DE GUARDIA centrado -->
+   <div style="flex:1; text-align:center">
+    <h2 style="font-size:16px; margin:0">REPORTE DE GUARDIA</h2>
+  </div>
+  <!-- Unidad + input a la derecha -->
+    <div style="margin-right:auto">
+    <label for="unidad" style="font-size:14px">Unidad: Las Bambas</label>
+
+  </div>
+
+</div>
+
+<!-- Datos generales -->
+<table style="width:100%; table-layout:fixed; font-size:8px">
+  <tr>
+    <th>ZONA</th><td><input id="zona" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+    <th>FECHA</th><td><input id="fecha" type="date" style="width:100%; height:var(--inputHeight,16px)"></td>
+    <th>TURNO</th><td><input id="turno" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+    <th>SONDAJE</th><td><input id="sondaje" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+    <th>MÁQUINA</th><td><input id="maquina" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+  </tr>
+  <tr>
+    <th>PROGRAMA</th><td><input id="prog" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+    <th>AZIMUTH</th><td><input id="az" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+    <th>INCLINACIÓN</th><td><input id="dip" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+    <th>PRECOLL</th><td><input id="precoll" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+    <th>PLATAFORMA</th><td><input id="plataforma" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+  </tr>
+</table>
+
+<table style="width:100%; table-layout:fixed">
+  <tr valign="top">
+
+  <!-- Columna: Perforación -->
+<td style="width:35%; padding-right:8px">
+  <h3> Perforación</h3>
+  <table style="width:100%; table-layout:fixed; font-size:8px">
+    <tr>
+      <td style="background:#dde6f3; font-weight:bold"><label for="long_tuberia">Long de tub al final del turno</label></td>
+      <td><input id="long_tuberia" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td style="background:#dde6f3; font-weight:bold"><label for="tamano">Tamaño Diametro</label></td>
+      <td><input id="tamaño diametro" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td style="background:#dde6f3; font-weight:bold"><label for="sobrante">Sobrante al final del turno</label></td>
+      <td><input id="sobrante" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td style="background:#dde6f3; font-weight:bold"><label for="prof_inicial">Profundidad al final del turno</label></td>
+      <td><input id="prof_inicial" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td style="background:#dde6f3; font-weight:bold"><label for="prof_final">Profundidad al inicio del turno</label></td>
+      <td><input id="prof_final" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td style="background:#dde6f3; font-weight:bold"><label for="perforado">Perforado</label></td>
+      <td><input id="perforado" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td style="background:#dde6f3; font-weight:bold"><label for="recuperacion">Muestra de recuperación</label></td>
+      <td><input id="recuperacion" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+  </table>
+</td>
+    <!-- Columna: Aditivos -->
+<td style="width:25%; padding-right:10px">
+  <h3>Aditivos</h3>
+  <table style="width:100%; border-collapse:collapse">
+    <tr>
+      <th style="width:60%">Descripción</th>
+      <th style="width:20%">Unidad</th>
+      <th style="width:20%">Cantidad</th>
+    </tr>
+    <!-- 7 filas -->
+    <tr>
+      <td><input id="aditivo_desc_1" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_uni_1" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_cant_1" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td><input id="aditivo_desc_2" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_uni_2" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_cant_2" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td><input id="aditivo_desc_3" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_uni_3" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_cant_3" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td><input id="aditivo_desc_4" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_uni_4" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_cant_4" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td><input id="aditivo_desc_5" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_uni_5" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_cant_5" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td><input id="aditivo_desc_6" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_uni_6" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_cant_6" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+    <tr>
+      <td><input id="aditivo_desc_7" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_uni_7" type="text" style="width:100%; height:var(--inputHeight,16px)"></td>
+      <td><input id="aditivo_cant_7" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+    </tr>
+  </table>
+</td>
+
+    <!-- Columna: Revestimiento -->
+<td style="width:33%">
+  <h3>Revestimiento</h3>
+  <table style="width:95%; border-collapse:collapse">
+    <tr><th>Tipo</th><th>Metros</th></tr>
+    <tr><td>PWT</td><td><input id="pw" type="text" style="width:100%"></td></tr>
+    <tr><td>HWT</td><td><input id="hw" type="text" style="width:100%"></td></tr>
+    <tr><td>HQ</td><td><input id="hq" type="text" style="width:100%"></td></tr>
+  </table>
+
+  <!-- Condición de la roca -->
+<h3 style="margin-top:8px; margin-bottom:4px; font-size:8px">🪨 Condición de la roca</h3>
+<table style="font-size:8x; border-collapse:collapse">
+  <tr>
+    <td style="padding:2px">Compacto</td>
+    <td style="padding:2px">
+      <input type="text" style="width:14px; height:var(--inputHeight,16px); text-align:center; font-size:7px">
+    </td>
+    <td style="padding:2px">Duro</td>
+    <td style="padding:2px">
+      <input type="text" style="width:14px; height:var(--inputHeight,16px); text-align:center; font-size:7px">
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:2px">Semicompacto</td>
+    <td style="padding:2px">
+      <input type="text" style="width:14px; height:var(--inputHeight,16px); text-align:center; font-size:7px">
+    </td>
+    <td style="padding:2px">Semi Duro</td>
+    <td style="padding:2px">
+      <input type="text" style="width:14px; height:var(--inputHeight,16px); text-align:center; font-size:7px">
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:2px">Fracturado</td>
+    <td style="padding:2px">
+      <input type="text" style="width:14px; height:var(--inputHeight,16px); text-align:center; font-size:7px">
+    </td>
+    <td style="padding:2px">Suave</td>
+    <td style="padding:2px">
+      <input type="text" style="width:14px; height:var(--inputHeight,16px); text-align:center; font-size:7px">
+    </td>
+  </tr>
+</table>
+
+<!-- Columna derecha: Horómetro + Abastecimiento + Evacuación -->
+<td style="width:20%; vertical-align:top">
+ 
+<!-- Horómetro -->
+<h3 style="margin-bottom:6px; font-size:8px">Horómetro</h3>
+<table style="width:100%; font-size:8px; margin-bottom:8px; table-layout:fixed">
+  <tr>
+    <td style="background:#dde6f3; font-weight:bold; height:var(--inputHeight,px); vertical-align:middle">
+      <label for="horometro_inicio">Inicio</label>
+    </td>
+    <td style="height:var(--inputHeight,px)">
+      <input id="horometro_inicio" type="text" style="width:100%; height:var(--inputHeight,px)">
+    </td>
+  </tr>
+  <tr>
+    <td style="background:#dde6f3; font-weight:bold; height:var(--inputHeight,px); vertical-align:middle">
+      <label for="horometro_fin">Final</label>
+    </td>
+    <td style="height:var(--inputHeight,px)">
+      <input id="horometro_fin" type="text" style="width:100%; height:var(--inputHeight,px)">
+    </td>
+  </tr>
+</table>
+
+  <!-- Abastecimiento de combustible -->
+<h3 style="margin-bottom:6px; font-size:8px"> Abto. de combustible</h3>
+<table style="width:100%; font-size:8px; margin-bottom:8px; table-layout:fixed">
+  <tr>
+    <td style="background:#dde6f3; font-weight:bold; height:var(--inputHeight,px); vertical-align:middle">
+      <label for="combustible_tipo">Galones</label>
+    </td>
+    <td style="height:var(--inputHeight,px)">
+      <input id="combustible_tipo" type="text" style="width:100%; height:var(--inputHeight,px)">
+    </td>
+  </tr>
+</table>
+
+  <!-- Evacuación de lodo -->
+<h3 style="margin-bottom:6px; font-size:8px"> Evacuación de lodo</h3>
+<table style="width:100%; font-size:8px; table-layout:fixed">
+  <tr>
+    <td style="background:#dde6f3; font-weight:bold; height:var(--inputHeight,px); vertical-align:middle">
+      <label for="lodo_tipo">Galones</label>
+    </td>
+    <td style="height:var(--inputHeight,px)">
+      <input id="lodo_tipo" type="text" style="width:100%; height:var(--inputHeight,px)">
+    </td>
+  </tr>
+</table>
+</td>
+
+  </tr>
+</table>
+
+<!-- 🔧 Contenedor principal en dos columnas -->
+<div style="display:flex; gap:12px; align-items:flex-start">
+
+  <!-- 📐 Procesos de perforación (izquierda) -->
+<div style="flex:2">
+  <h3 style="font-size:9px; margin-bottom:6px"> Procesos de perforación</h3>
+  <table style="width:95%; table-layout:fixed; border-collapse:collapse; font-size:8px" border="1">
+    <colgroup>
+      <col style="width:12%">
+      <col style="width:12%">
+      <col style="width:6%">
+      <col style="width:10%">
+      <col style="width:6%">
+      <col style="width:10%">
+      <col style="width:8%">
+      <col style="width:7%">
+    </colgroup>
+    <tbody>
+      <!-- Rimado -->
+      <tr>
+        <td style="background:#dde6f3; font-weight:bold">Rimado</td>
+        <td><input id="rimado_c1" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Desde</td>
+        <td><input id="rimado_c2" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Hasta</td>
+        <td><input id="rimado_c3" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Tamaño</td>
+        <td><input id="rimado_c4" type="text" style="width:100%"></td>
+      </tr>
+      <!-- Ensanchado -->
+      <tr>
+        <td style="background:#dde6f3; font-weight:bold">Ensanchado</td>
+        <td><input id="ensanchado_c1" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Desde</td>
+        <td><input id="ensanchado_c2" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Hasta</td>
+        <td><input id="ensanchado_c3" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Tamaño</td>
+        <td><input id="ensanchado_c4" type="text" style="width:100%"></td>
+      </tr>
+      <!-- Revestimiento -->
+      <tr>
+        <td style="background:#dde6f3; font-weight:bold">Revestimiento</td>
+        <td><input id="revestimiento_c1" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Desde</td>
+        <td><input id="revestimiento_c2" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Hasta</td>
+        <td><input id="revestimiento_c3" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Tamaño</td>
+        <td><input id="revestimiento_c4" type="text" style="width:100%"></td>
+      </tr>
+      <!-- Tricono -->
+      <tr>
+        <td style="background:#dde6f3; font-weight:bold">Perf con tricono</td>
+        <td><input id="tricono_c1" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Desde</td>
+        <td><input id="tricono_c2" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Hasta</td>
+        <td><input id="tricono_c3" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Tamaño</td>
+        <td><input id="tricono_c4" type="text" style="width:100%"></td>
+      </tr>
+      <!-- Reperforado -->
+      <tr>
+        <td style="background:#dde6f3; font-weight:bold">Reperforado</td>
+        <td><input id="reperforado_c1" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Desde</td>
+        <td><input id="reperforado_c2" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Hasta</td>
+        <td><input id="reperforado_c3" type="text" style="width:100%"></td>
+        <td style="text-align:center; background:#dde6f3; font-weight:bold">Tamaño</td>
+        <td><input id="reperforado_c4" type="text" style="width:100%"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+  <!-- 📐 Pruebas de inclinación (derecha) -->
+  <div style="flex:1">
+    <h3 style="font-size:8px; margin-bottom:px">📐 Pruebas de inclinación</h3>
+    <table style="width:90%; table-layout:fixed; font-size:px; border-collapse:collapse" border="">
+      <tr>
+        <th style="width:34%">Profundidad</th>
+        <th style="width:33%">Azimut</th>
+        <th style="width:33%">Inclinación</th>
+      </tr>
+      <tr>
+        <td><input id="inclinacion_prof_1" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+        <td><input id="inclinacion_azim_1" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+        <td><input id="inclinacion_inc_1" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+      </tr>
+      <tr>
+        <td><input id="inclinacion_prof_2" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+        <td><input id="inclinacion_azim_2" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+        <td><input id="inclinacion_inc_2" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+      </tr>
+      <tr>
+        <td><input id="inclinacion_prof_3" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+        <td><input id="inclinacion_azim_3" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+        <td><input id="inclinacion_inc_3" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+      </tr>
+      <!-- ... puedes continuar hasta la fila 7 si lo deseas -->
+    </table>
+  </div>
+
+</div>
+<!-- 🔧 Fila: Brocas/Zapata/R Shell/Tricono + Fluido -->
+<div style="display:flex; gap:12px; align-items:flex-start; margin-top:12px">
+
+  <!-- 🔩 Brocas/Zapata/R Shell/Tricono -->
+<div style="flex:1">
+  <h3 style="font-size:8px; margin-bottom:px">🔩 Brocas/Zapata/R Shell/Tricono</h3>
+  <table style="width:100%; border-collapse:collapse; font-size:8px" border="1">
+    <colgroup>
+      <col style="width:18%"> <!-- Etiqueta -->
+      <col style="width:20%"> <!-- Campo 1 -->
+      <col style="width:20%"> <!-- Campo 2 -->
+      <col style="width:20%"> <!-- Campo 3 -->
+      <col style="width:22%"> <!-- Campo 4 -->
+    </colgroup>
+    <tbody>
+      <tr>
+        <td style="font-weight:bold; background:#dde6f3; padding:2px"><label for="broca_desc_1">Descripción</label></td>
+        <td><input id="broca_desc_1" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_desc_2" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_desc_3" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_desc_4" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+      </tr>
+      <tr>
+        <td style="font-weight:bold; background:#dde6f3; padding:2px"><label for="broca_serie_1">N° de serie</label></td>
+        <td><input id="broca_serie_1" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_serie_2" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_serie_3" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_serie_4" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+      </tr>
+      <tr>
+        <td style="font-weight:bold; background:#dde6f3; padding:2px"><label for="broca_desde_1">Desde</label></td>
+        <td><input id="broca_desde_1" type="number" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_desde_2" type="number" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_desde_3" type="number" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_desde_4" type="number" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+      </tr>
+      <tr>
+        <td style="font-weight:bold; background:#dde6f3; padding:2px"><label for="broca_hasta_1">Hasta</label></td>
+        <td><input id="broca_hasta_1" type="number" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_hasta_2" type="number" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_hasta_3" type="number" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_hasta_4" type="number" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+      </tr>
+      <tr>
+        <td style="font-weight:bold; background:#dde6f3; padding:2px"><label for="broca_cond_1">Condición</label></td>
+        <td><input id="broca_cond_1" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_cond_2" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_cond_3" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+        <td><input id="broca_cond_4" type="text" style="width:100%; height:var(--inputHeight,14px); font-size:8px"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+  <!-- Fluido -->
+   
+  <div style="flex:1">
+    <h3 style="font-size:8px; margin-bottom:px">💧 Fluido</h3>
+    <table style="width:70%; table-layout:fixed; font-size:8px; border-collapse:collapse" border="1">
+      <tr>
+        <td style="background:#dde6f3; font-weight:bold"><label for="fluido_agua">Agua(gal)</label></td>
+        <td><input id="fluido_agua" type="text" style="width:100%; height:var(--inputHeight,10px)"></td>
+      </tr>
+      <tr>
+        <td style="background:#dde6f3; font-weight:bold"><label for="fluido_espuma">PH</label></td>
+        <td><input id="fluido_espuma" type="text" style="width:100%; height:var(--inputHeight,10px)"></td>
+      </tr>
+      <tr>
+        <td style="background:#dde6f3; font-weight:bold"><label for="fluido_polimero">CA++</label></td>
+        <td><input id="fluido_polimero" type="text" style="width:100%; height:var(--inputHeight,10px)"></td>
+      </tr>
+      <tr>
+        <td style="background:#dde6f3; font-weight:bold"><label for="fluido_bentonita">Viscosidad (s/q)</label></td>
+        <td><input id="fluido_bentonita" type="text" style="width:100%; height:var(--inputHeight,10px)"></td>
+      </tr>
+      <tr>
+        <td style="background:#dde6f3; font-weight:bold"><label for="fluido_espumante">Retorno (%)</label></td>
+        <td><input id="fluido_espumante" type="text" style="width:100%; height:var(--inputHeight,10px)"></td>
+      </tr>
+      <tr>
+        <td style="background:#dde6f3; font-weight:bold"><label for="fluido_aditivo">Nivel(m)</label></td>
+        <td><input id="fluido_aditivo" type="text" style="width:100%; height:var(--inputHeight,10px)"></td>
+      </tr>
+      <tr>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
+
+<!-- 🕒 Cargo de tiempos (en horas) -->
+<h3 style="font-size:9px; margin-top:16px; margin-bottom:5px">🕒 Cargo de tiempos (en horas)</h3>
+<table style="width:100%; table-layout:fixed; border-collapse:collapse; font-size:8px" border="1">
+  <colgroup>
+    <col style="width:10%">  <!-- Código -->
+    <col style="width:60%">  <!-- Actividad -->
+    <col style="width:10%">  <!-- Hora Inicio -->
+    <col style="width:10%">  <!-- Hora Final -->
+    <col style="width:10%">  <!-- Cant. de hrs -->
+    <col style="width:10%">  <!-- Hora cobrable -->
+    <col style="width:10%">  <!-- HNC -->
+  </colgroup>
+  <thead style="background-color:#f0f0f0">
+    <tr>
+      <th>Código</th>
+      <th>Actividad</th>
+      <th>Hora Inicio</th>
+      <th>Hora Final</th>
+      <th>Cant.Horas</th>
+      <th>Hora cobrable</th>
+      <th>Hora no cobrable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- 14 filas -->
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+     
+    <script>
+  const actividades = {
+  "DD101": { descripcion: "Abastecimiento Combustible", cobrable: false },
+  "DD102": { descripcion: "Acondicionando Poza de Fluido", cobrable: false },
+  "DD103": { descripcion: "Acondicionando Sondaje", cobrable: true },
+  "DD104": { descripcion: "Apoyo a Otro Turno (Maniobras)", cobrable: false },
+  "DD105": { descripcion: "Armado de Maquina y/o Equipos", cobrable: false },
+  "DD106": { descripcion: "Arreglo y/o Cambio de Acces. Perf.", cobrable: false },
+  "DD107": { descripcion: "Cambio de Maquina y/o Equipo", cobrable: false },
+  "DD108": { descripcion: "Cambio de Turno / Guardia", cobrable: false },
+  "DD109": { descripcion: "Charla de Seguridad Cliente / Geotec", cobrable: false },
+  "DD110": { descripcion: "Charla Induccion Cliente", cobrable: false },
+  "DD111": { descripcion: "Charla Operacional Cliente / Geotec", cobrable: false },
+  "DD112": { descripcion: "Construccion de Loza", cobrable: false },
+  "DD113": { descripcion: "Control y/o Limpieza de Filtracion", cobrable: true },
+  "DD114": { descripcion: "Desarmado de Maquina y/o Equipos", cobrable: false },
+  "DD115": { descripcion: "Descanso de Personal", cobrable: false },
+  "DD116": { descripcion: "Descongelando Mangueras", cobrable: false },
+  "DD117": { descripcion: "* Desviando Sondaje", cobrable: false },
+  "DD118": { descripcion: "Ensanche", cobrable: true },
+  "DD119": { descripcion: "Esperando Acceso y/o Plataf. Perf.", cobrable: true },
+  "DD120": { descripcion: "Esperando Accesorio De Perf. / Aditivos", cobrable: false },
+  "DD121": { descripcion: "* Esperando Agua", cobrable: false },
+  "DD122": { descripcion: "Esperando Ayudante y/o Perforista", cobrable: false },
+  "DD123": { descripcion: "* Esperando Combustible", cobrable: false },
+  "DD124": { descripcion: "Esperando Evac. de Fluido Perf.", cobrable: false },
+  "DD125": { descripcion: "Esperando Fraguado", cobrable: true },
+  "DD126": { descripcion: "Esperando Grua", cobrable: false },
+  "DD127": { descripcion: "Esperando Mecanico / Electricista / Soldador", cobrable: false },
+  "DD128": { descripcion: "Esperando Mejoras en Plataforma", cobrable: true },
+  "DD129": { descripcion: "* Esperando Moviliz. por Seguridad", cobrable: false },
+  "DD130": { descripcion: "Esperando Orden Geotec", cobrable: false },
+  "DD131": { descripcion: "Esperando Orden Cliente", cobrable: true },
+  "DD132": { descripcion: "Esperando Pruebas Cliente", cobrable: true },
+  "DD133": { descripcion: "Esperando Mantenimiento o Reparación Luminaria", cobrable: false },
+  "DD134": { descripcion: "Esperando Repuesto y/o Reparacion", cobrable: false },
+  "DD135": { descripcion: "Inspeccion de Equipo (Check List)", cobrable: false },
+  "DD136": { descripcion: "Inspeccion y/o Auditoria Cliente", cobrable: true },
+  "DD137": { descripcion: "Inspeccion y/o Auditoria Geotec", cobrable: false },
+  "DD138": { descripcion: "Instalacion de Casing", cobrable: true },
+  "DD139": { descripcion: "Instalacion de Geomembrana", cobrable: false },
+  "DD140": { descripcion: "Intentando Perforar", cobrable: false },
+  "DD141": { descripcion: "Inyectando Cemento", cobrable: true },
+  "DD142": { descripcion: "* Limpieza de Derrame", cobrable: false },
+  "DD143": { descripcion: "Instalacion de PVC / Sensores Cuerda Vibrante", cobrable: true },
+  "DD144": { descripcion: "Instalacion de Gravilla / Grouting", cobrable: true },
+  "DD145": { descripcion: "Instalacion de Piezometro", cobrable: true },
+  "DD146": { descripcion: "Lavando Pozo", cobrable: true },
+  "DD147": { descripcion: "Mantenimiento Programado", cobrable: false },
+  "DD148": { descripcion: "Moviliz. de Maquina y/o Equipos", cobrable: false },
+  "DD149": { descripcion: "Movim. Tuberia para Piezometro", cobrable: true },
+  "DD150": { descripcion: "Movim. Tuberia para Ensanchar", cobrable: true },
+  "DD151": { descripcion: "Movim. Tuberia para Acondicionar", cobrable: true },
+  "DD152": { descripcion: "* Movim. Tuberia por Desvio", cobrable: false },
+  "DD153": { descripcion: "Movim. Tuberia por Cambio / Rev. Broca", cobrable: true },
+  "DD154": { descripcion: "Movim. Tuberia por Cambio de Linea", cobrable: true },
+  "DD155": { descripcion: "* Movim. Tuberia por Cortar Tuberia", cobrable: false },
+  "DD156": { descripcion: "* Movim. Tuberia por Otra Razon", cobrable: false },
+  "DD157": { descripcion: "Movim. Tuberia por Prueba Televiewer", cobrable: true },
+  "DD158": { descripcion: "Movim. Tuberia por Recup. Tubo Int. / Muest.", cobrable: true },
+  "DD159": { descripcion: "* Movim. Tuberia por Rescate Herramienta", cobrable: false },
+  "DD160": { descripcion: "Movim. Tuberia por Termino de Sondaje", cobrable: false },
+  "DD161": { descripcion: "Orden y Limpieza de Plataforma", cobrable: false },
+  "DD162": { descripcion: "Paralizacion por Dia Festivo / Feriado", cobrable: false },
+  "DD163": { descripcion: "Paralizacion por Disparo / Voladura", cobrable: true },
+  "DD163": { descripcion: "Paralizacion por Disparo / Voladura", cobrable: true },
+  "DD164": { descripcion: "Paralizacion por Mal Tiempo", cobrable: true },
+  "DD165": { descripcion: "Paralizacion por Orden de Geotec", cobrable: false },
+  "DD166": { descripcion: "Paralizacion por Orden de Cliente", cobrable: true },
+  "DD167": { descripcion: "Paralizacion por Conflictos Sociales", cobrable: true },
+  "DD168": { descripcion: "* Paralizacion por Seguridad", cobrable: false },
+  "DD169": { descripcion: "Perforacion con Broca D.", cobrable: false },
+  "DD170": { descripcion: "Perforacion con Serrucho", cobrable: false },
+  "DD171": { descripcion: "Perforacion con Tricono", cobrable: false },
+  "DD172": { descripcion: "Preparacion de Fluido", cobrable: false },
+  "DD173": { descripcion: "Preparacion de Herramienta", cobrable: false },
+  "DD174": { descripcion: "Programacion de ACT REFLEX", cobrable: true },
+  "DD175": { descripcion: "Prueba (Otros)", cobrable: true },
+  "DD176": { descripcion: "Prueba de Inclinacion", cobrable: true },
+  "DD177": { descripcion: "Prueba Televiewer", cobrable: true },
+  "DD178": { descripcion: "Prueba Lefranc, STP, LTP", cobrable: true },
+  "DD179": { descripcion: "Prueba Lugeon", cobrable: true },
+  "DD180": { descripcion: "Refrigerio", cobrable: false },
+  "DD181": { descripcion: "* Reinstalacion de Maquina Perf.", cobrable: false },
+  "DD182": { descripcion: "Reparaciones Generales (detallar)", cobrable: false },
+  "DD183": { descripcion: "Reperforando Derrumbe", cobrable: true },
+  "DD184": { descripcion: "* Reperforando Herramienta", cobrable: false },
+  "DD185": { descripcion: "* Rescate de Acc. / Herram. / Tuberia", cobrable: false },
+  "DD186": { descripcion: "Retiro de Casing", cobrable: true },
+  "DD187": { descripcion: "Rescate de Casing", cobrable: true },
+  "DD188": { descripcion: "Rimado", cobrable: true },
+  "DD189": { descripcion: "Sellado y Obturado de Sondaje", cobrable: true },
+  "DD190": { descripcion: "Sellando Cuello Casing", cobrable: true },
+  "DD191": { descripcion: "Trabajos de Soldadura", cobrable: false },
+  "DD192": { descripcion: "Trabajos en Altura", cobrable: false },
+  "DD193": { descripcion: "Uso de Casing Puller", cobrable: true },
+  "GE101": { descripcion: "Abastecimiento Combustible", cobrable: false },
+  "GE102": { descripcion: "Acondicionando Poza de Fluido", cobrable: false },
+  "GE103": { descripcion: "Acondicionando Sondaje", cobrable: true },
+  "GE104": { descripcion: "Apoyo a Otro Turno (Maniobras)", cobrable: false },
+  "GE105": { descripcion: "Armado de Maquina y/o Equipo", cobrable: true },
+  "GE106": { descripcion: "Arreglo y/o Cambio de Acces. Perf.", cobrable: false },
+  "GE107": { descripcion: "Cambio de Maquina y/o Equipo", cobrable: false },
+  "GE108": { descripcion: "Cambio de Turno / Guardia", cobrable: false },
+  "GE109": { descripcion: "Charla de Seguridad Cliente / Geotec", cobrable: false },
+  "GE110": { descripcion: "Charla Induccion Cliente / Geotec", cobrable: false },
+  "GE111": { descripcion: "Charla Operacional Cliente / Geotec", cobrable: false },
+  "GE112": { descripcion: "Construccion de Loza", cobrable: false },
+  "GE113": { descripcion: "* Control y/o Limpieza de Filtracion", cobrable: true },
+  "GE114": { descripcion: "Desarmado de Maquina y Equipo", cobrable: true },
+  "GE115": { descripcion: "Descanso de Personal", cobrable: false },
+  "GE116": { descripcion: "Descongelando Mangueras", cobrable: false },
+  "GE117": { descripcion: "* Desviando Sondaje", cobrable: false },
+  "GE118": { descripcion: "Ensanche", cobrable: true },
+  "GE119": { descripcion: "Esperando Acceso y/o Plataf. Perf.", cobrable: true },
+  "GE120": { descripcion: "Esperando Accesorio De Perf. / Aditivos", cobrable: false },
+  "GE121": { descripcion: "* Esperando Agua", cobrable: false },
+  "GE122": { descripcion: "Esperando Ayudante y/o Perforista", cobrable: false },
+  "GE123": { descripcion: "* Esperando Combustible", cobrable: false },
+  "GE124": { descripcion: "Esperando Evac. de Fluido Perf.", cobrable: false },
+  "GE125": { descripcion: "Esperando Fraguado", cobrable: true },
+  "GE126": { descripcion: "Esperando Grua", cobrable: false },
+  "GE127": { descripcion: "Esperando Mecanico / Electricista / Soldador", cobrable: false },
+  "GE128": { descripcion: "* Esperando Moviliz. por Seguridad", cobrable: false },
+  "GE129": { descripcion: "Esperando Orden Geotec", cobrable: false },
+  "GE130": { descripcion: "Esperando Orden Cliente", cobrable: true },
+  "GE131": { descripcion: "Esperando Pruebas Cliente", cobrable: true },
+  "GE132": { descripcion: "Esperando Mantenimiento o Reparación Luminaria", cobrable: false },
+  "GE133": { descripcion: "Esperando Repuesto y/o Reparacion", cobrable: false },
+  "GE134": { descripcion: "Inspeccion de Equipo (Check List)", cobrable: false },
+  "GE135": { descripcion: "* Inspeccion y/o Auditoria Cliente / Geotec", cobrable: false },
+  "GE136": { descripcion: "Instalacion de Casing", cobrable: true },
+  "GE137": { descripcion: "Instalacion de Geomembrana", cobrable: false },
+  "GE138": { descripcion: "Instalacion de Piezometros, inclinometros, TDR", cobrable: true },
+  "GE139": { descripcion: "Intentando Perforar", cobrable: false },
+  "GE140": { descripcion: "Inyectado de Fragua (Cemento y/o Yeso)", cobrable: true },
+  "GE141": { descripcion: "Limpieza de Derrame", cobrable: false },
+  "GE142": { descripcion: "Instalación de PVC", cobrable: true },
+  "GE143": { descripcion: "Inyección de grava", cobrable: true },
+  "GE144": { descripcion: "Instalación de grouting", cobrable: true },
+  "GE145": { descripcion: "Limpieza de Piezometro", cobrable: true },
+  "GE146": { descripcion: "Lavando Pozo", cobrable: true },
+  "GE147": { descripcion: "Mantenimiento Programado", cobrable: false },
+  "GE148": { descripcion: "Moviliz. de Maquina y/o Equipos", cobrable: true },
+  "GE149": { descripcion: "Movim. Tuberia para Ensanchar", cobrable: true },
+  "GE150": { descripcion: "Movim. Tuberia para Acondicionar", cobrable: true },
+  "GE151": { descripcion: "* Movim. Tuberia por Desvio", cobrable: false },
+  "GE152": { descripcion: "Movim. Tuberia por Cambio / Rev. Broca", cobrable: false },
+  "GE153": { descripcion: "Movim. Tuberia por Cambio de Linea", cobrable: false },
+  "GE154": { descripcion: "* Movim. Tuberia por Cortar Tuberia", cobrable: false },
+  "GE155": { descripcion: "* Movim. Tuberia por Otra Razon", cobrable: false },
+  "GE156": { descripcion: "Movim. Tuberia por Prueba", cobrable: true },
+  "GE157": { descripcion: "Movim. Tuberia por Recup. Tubo Int. / Muest.", cobrable: false },
+  "GE158": { descripcion: "* Movim. Tuberia por Rescate Herramienta", cobrable: false },
+  "GE159": { descripcion: "Movim. Tuberia por Termino de Sondaje", cobrable: false },
+  "GE160": { descripcion: "Orden y Limpieza de Plataforma", cobrable: false },
+  "GE161": { descripcion: "Paralizacion por Dia Festivo / Feriado", cobrable: false },
+  "GE162": { descripcion: "Paralizacion por Disparo / Voladura", cobrable: true },
+  "GE163": { descripcion: "Paralizacion por Mal Tiempo", cobrable: true },
+  "GE164": { descripcion: "Paralizacion por Orden de Geotec", cobrable: false },
+  "GE165": { descripcion: "Paralizacion por Orden de Cliente", cobrable: true },
+  "GE166": { descripcion: "Paralizacion por Conflictos Sociales", cobrable: true },
+  "GE167": { descripcion: "* Paralizacion por Seguridad", cobrable: false },
+  "GE168": { descripcion: "Perforacion con Broca D.", cobrable: false },
+  "GE169": { descripcion: "Perforacion con Serrucho", cobrable: true },
+  "GE170": { descripcion: "Perforacion con Tricono", cobrable: false },
+  "GE171": { descripcion: "Preparacion de Fluido", cobrable: false },
+  "GE172": { descripcion: "Preparacion de Herramienta", cobrable: false },
+  "GE173": { descripcion: "Programacion de ACT REFLEX", cobrable: true },
+  "GE174": { descripcion: "Prueba nivel freático", cobrable: true },
+  "GE175": { descripcion: "Prueba de Inclinacion", cobrable: true },
+  "GE176": { descripcion: "Prueba Televiewer", cobrable: true },
+  "GE177": { descripcion: "Prueba Lefranc, STP, LTP", cobrable: true },
+  "GE178": { descripcion: "Prueba Lugeon", cobrable: true },
+  "GE179": { descripcion: "Refrigerio", cobrable: false },
+  "GE180": { descripcion: "Reinstalacion de Maquina Perf.", cobrable: true },
+  "GE181": { descripcion: "Reparaciones Generales (detallar)", cobrable: false },
+  "GE182": { descripcion: "Reperforando Derrumbe", cobrable: true },
+  "GE183": { descripcion: "* Reperforando Herramienta", cobrable: false },
+  "GE184": { descripcion: "Rescate de Acc. / Herram. / Tuberia", cobrable: true },
+  "GE185": { descripcion: "Retiro de Casing", cobrable: true },
+  "GE186": { descripcion: "Rimado", cobrable: true },
+  "GE187": { descripcion: "Sellado y Obturado de Sondaje", cobrable: true },
+  "GE188": { descripcion: "Sellando Cuello Casing", cobrable: true },
+  "GE189": { descripcion: "Trabajos de Soldadura", cobrable: false },
+  "GE190": { descripcion: "Trabajos en Altura", cobrable: false },
+  "GE191": { descripcion: "Uso de Casing Puller", cobrable: true }
+};
+
+document.querySelectorAll('table tbody tr').forEach(fila => {
+  const inputs = fila.querySelectorAll('input');
+  if (inputs.length >= 6) {
+    const campoCodigo = inputs[0];
+    const campoActividad = inputs[1];
+    const campoHoraCobrable = inputs[5]; // ← solo este se pinta
+
+    campoCodigo.addEventListener('input', () => {
+      const codigo = campoCodigo.value.trim().toUpperCase();
+      const actividad = actividades[codigo];
+
+      if (actividad) {
+        const color = actividad.cobrable ? "#c6efce" : "#ffffff";
+
+        campoActividad.value = actividad.descripcion;
+        campoActividad.style.backgroundColor = color;
+        campoActividad.style.width = "100%";
+        campoActividad.style.boxSizing = "border-box";
+
+        campoHoraCobrable.style.backgroundColor = color;
+        campoHoraCobrable.style.width = "100%";
+        campoHoraCobrable.style.boxSizing = "border-box";
+
+      } else {
+        campoActividad.value = "";
+        campoActividad.style.backgroundColor = "white";
+        campoHoraCobrable.style.backgroundColor = "white";
+      }
+    });
+  }
+});
+</script>
+  </tbody>
+</table>
+
+<!-- 📝 Comentarios -->
+<h3 style="font-size:9px; margin-top:8px; margin-bottom:4px">📝 Comentarios</h3>
+<div id="comentarios" contenteditable="true" style="
+  width:100%;
+  min-height:60px;
+  font-size:8px;
+  padding:4px;
+  border:1px solid #999;
+  border-radius:4px;
+  background-color:#fff;
+  white-space:pre-wrap;
+  word-wrap:break-word;
+  box-sizing:border-box;
+  outline:none;
+">
+</div>
+
+<!-- 👥 Personal en tabla -->
+<table style="width:100%; font-size:8px; border-collapse:collapse; margin-top:8px">
+  <tr>
+    <td style="padding:2px 4px; border:1px solid #999; width:12%; background:#dde6f3; font-weight:bold; vertical-align:middle">SUPERVISOR</td>
+    <td style="padding:2px 4px; border:1px solid #999; vertical-align:middle">
+      <input id="supervisor" type="text" style="width:100%; font-size:8px; padding:2px; border:0px solid #999; border-radius:4px">
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:2px 4px; border:1px solid #999; background:#dde6f3; font-weight:bold; vertical-align:middle">PERFORISTA</td>
+    <td style="padding:2px 4px; border:1px solid #999; vertical-align:middle">
+      <input id="perforista" type="text" style="width:100%; font-size:8px; padding:2px; border: 0px solid #999; border-radius:4px">
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:2px 4px; border:1px solid #999; background:#dde6f3; font-weight:bold; vertical-align:middle">AYUDANTE 1</td>
+    <td style="padding:2px 4px; border:1px solid #999; vertical-align:middle">
+      <input id="ayudante1" type="text" style="width:100%; font-size:8px; padding:2px; border:0px solid #999; border-radius:4px">
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:2px 4px; border:1px solid #999; background:#dde6f3; font-weight:bold; vertical-align:middle">AYUDANTE 2</td>
+    <td style="padding:2px 4px; border:1px solid #999; vertical-align:middle">
+      <input id="ayudante2" type="text" style="width:100%; font-size:8px; padding:2px; border:0px solid #999; border-radius:4px">
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:2px 4px; border:1px solid #999; background:#dde6f3; font-weight:bold; vertical-align:middle">AYUDANTE 3</td>
+    <td style="padding:2px 4px; border:1px solid #999; vertical-align:middle">
+      <input id="ayudante3" type="text" style="width:100%; font-size:8px; padding:2px; border:0px solid #999; border-radius:4px">
+    </td>
+  </tr>
+</table>
+
+<!-- ✍️ Firmas institucionales con espacio visible -->
+<table style="width:100%; font-size:8px; border-collapse:collapse; margin-top:16px">
+  <colgroup>
+    <col style="width:50%">
+    <col style="width:50%">
+  </colgroup>
+  <tr>
+    <!-- Firma GEOTEC -->
+    <td style="padding:12px 6px; vertical-align:bottom; text-align:center; height:60px">
+      <div style="border-top:1px solid #000; width:80%; margin:0 auto 6px auto"></div>
+      <div style="font-weight:bold">Representante de GEOTEC</div>
+    </td>
+
+    <!-- Firma Cliente -->
+    <td style="padding:12px 6px; vertical-align:bottom; text-align:center; height:60px">
+      <div style="border-top:1px solid #000; width:80%; margin:0 auto 6px auto"></div>
+      <div style="font-weight:bold">Representante del Cliente</div>
+    </td>
+  </tr>
+</table>
+
+  <script>
+    const campos = ["zona1", "fecha", "zona2", "zona3", "turno", "observaciones"];
+
+    // Cargar valores desde localStorage
+    campos.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.value = localStorage.getItem(id) || "";
+        el.addEventListener("input", () => {
+          localStorage.setItem(id, el.value);
+        });
+      }
+    });
+
+     // Botón PDF
+    document.getElementById("btnPDF").addEventListener("click", () => {
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert("jsPDF aún no está listo. Intenta nuevamente.");
+        return;
+      }
+
+      const jsPDF = window.jspdf.jsPDF;
+      const original = document.getElementById("reporte");
+      const clon = original.cloneNode(true);
+
+      clon.querySelectorAll("input, textarea").forEach(el => {
+        const div = document.createElement("div");
+        div.textContent = el.value;
+        div.style.border = "0px solid #ccc";
+        div.style.padding = "2px";
+        div.style.minHeight = "8px";
+        div.style.fontSize = "8px";
+        el.parentNode.replaceChild(div, el);
+      });
+
+      clon.style.position = "absolute";
+      clon.style.left = "-9999px";
+      document.body.appendChild(clon);
+
+      html2canvas(clon, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = pageWidth;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+
+        let position = 0;
+        if (imgHeight <= pageHeight) {
+          pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+        } else {
+          while (position < imgHeight) {
+            pdf.addImage(imgData, "PNG", 0, -position, imgWidth, imgHeight);
+            position += pageHeight;
+            if (position < imgHeight) pdf.addPage();
+          }
+        }
+
+        pdf.save("reporte_PE7-127.pdf");
+        document.body.removeChild(clon);
+      });
+    });
+    
+
+    // Botón Excel
+   document.getElementById("btnExcel").addEventListener("click", () => {
+  const wb = XLSX.utils.book_new();
+
+  // Encabezados en orden específico
+  const encabezados = [
+    "MAQUINA", "TURNO", "SONDAJE", "INCLINACIÓN", "AZIMUTH", "PROGRAMA",
+    "TAMAÑO DIAMETRO","PW","HW","HQ","PERFORADO", "PROFUNDIDAD AL INICIO DEL TURNO",
+    "PROFUNDIDAD AL FINAL DEL TURNO", "COMENTARIOS", "PERFORISTA"
+  ];
+
+  // Valores capturados desde los inputs y el div editable
+  const valores = [
+    document.getElementById("maquina")?.value || "",
+    document.getElementById("turno")?.value || "",
+    document.getElementById("sondaje")?.value || "",
+    document.getElementById("dip")?.value || "",
+    document.getElementById("az")?.value || "",
+    document.getElementById("prog")?.value || "",
+    document.getElementById("tamaño diametro")?.value || "",
+    document.getElementById("pw")?.value || "",
+    document.getElementById("hw")?.value || "",
+    document.getElementById("hq")?.value || "",
+    document.getElementById("perforado")?.value || "",
+    document.getElementById("prof_inicial")?.value || "",
+    document.getElementById("prof_final")?.value || "",
+    document.getElementById("comentarios")?.innerText.trim() || "",
+    document.getElementById("perforista")?.value || ""
+  ];
+
+  const ws = XLSX.utils.aoa_to_sheet([encabezados, valores]);
+  XLSX.utils.book_append_sheet(wb, ws, "Reporte Horizontal");
+  XLSX.writeFile(wb, "reporte_PE7-127.xlsx");
+});
+    </script>
+
+  <div id="botonSiguiente">
+  <a href="diario-perforación.html">
+    <button style="padding:12px 24px; font-size:14px; background-color:#f9cd00; color:rgb(255, 255, 255); border:none; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.2); cursor:pointer;">
+      Siguiente
+    </button>
+  </a>
+</div>
+
+<style>
+  #botonSiguiente {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+  }
+</style>
+    </a>
+  </div>
+</body>
+</html>

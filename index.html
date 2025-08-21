@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pantalla Principal</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background-color: #ecf0f3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #003366;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #003366;
+      font-family: pragmatica-extended-bold;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 11px;
+      color: #003366;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      font-size: 18px;
+      background-color: #f9cd00;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    button:hover {
+      background-color: #002752;
+    }
+
+    @media screen and (max-width: 400px) {
+      h1 { font-size: 24px; }
+      h2 { font-size: 10px; }
+      input, button { font-size: 16px; padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>GEOTEC</h1>
+  <h2>Soluciones para la industria minera</h2>
+
+  <div class="login-form">
+    <input type="text" id="usuario" placeholder="Usuario">
+    <input type="password" id="clave" placeholder="Contraseña">
+    <button onclick="validarLogin()">Ingresar</button>
+  </div>
+
+  <script>
+    function validarLogin() {
+      const usuario = document.getElementById("usuario").value.toLowerCase();
+      const clave = document.getElementById("clave").value.toLowerCase();
+
+      if (usuario === "iliam" && clave === "iliam") {
+        alert("Acceso concedido ✅");
+        window.location.href = "panel-admin.html";
+      } else {
+        alert("Acceso denegado ❌");
+      }
+    }
+  </script>
+
+</body>
+</html>

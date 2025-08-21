@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diario de Perforación</title>
+
+  <!-- Librerías -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #ecf0f3;
+      color: #003366;
+    }
+    h1 {
+      text-align: center;
+      margin: 10px 0;
+      font-size: 20px;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .btn {
+      background-color: #f9cd00;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #002752;
+    }
+    #reporte {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8px;
+      table-layout: fixed;
+    }
+    th, td {
+      border: 0.1px solid #aaa;
+      padding: 1px;
+      text-align: left;
+    }
+    th {
+      background-color: #dde6f3;
+    }
+    input, textarea {
+      width: 100%;
+      font-size: 8px;
+      border: none;
+      background: transparent;
+      color: #003366;
+    }
+    input:focus, textarea:focus {
+      outline: 2px solid #f9cd00;
+      background-color: #fffef5;
+    }
+    textarea {
+      resize: none;
+      min-height: 40px;
+    }
+    .vertical-header {
+  writing-mode: vertical-lr;
+  text-align: center;
+  font-size: 8px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  line-height: 1.2;
+  white-space: nowrap;
+  padding: 2px 0;
+}
+    @media print {
+      body {
+        background: white;
+      }
+      #reporte {
+        width: auto;
+        margin: 1;
+        padding: 0;
+      }
+      .buttons {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📘 Diario de Perforación</h1>
+
+  <div class="buttons">
+    <button class="btn" id="btnPDF">📄 PDF</button>
+    <button class="btn" id="btnExcel">📊 Excel</button>
+  </div>
+
+  <div id="reporte">
+
+
+  <!-- 🧾 Título institucional dentro de la hoja -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:8px">
+  
+  <!-- Izquierda: GEOTEC -->
+  <div style="font-size:15px; font-weight:bold; color:#f9cd00">
+    GEOTEC
+  </div>
+
+  <!-- Centro: Diario de Perforación -->
+  <div style="text-align:center; flex:9; font-weight:bold; color:#003366; font-size:15px">
+    DIARIO DE PERFORACIÓN
+  </div>
+
+  <!-- Derecha: Unidad -->
+  <div style="font-size:8px; font-weight:600; color:#003366; text-align:right">
+    Unidad: Las Bambas
+  </div>
+
+</div>
+  
+</h3>
+<table>
+  <tr>
+    <th style="width:5%">Taladro</th>
+    <th style="width:3%">Fecha</th>
+    <th style="width:10%">Perforista</th>
+    <th style="width:2%">Turno</th>
+    <th style="width:4%">Unidad</th>
+    <th style="width:3%">Máquina</th>
+  </tr>
+  <tr>
+    <td style="width:8%"><input type="text" id="sondaje" style="width:100%; height:var(--inputHeight)"></td>
+    <td style="width:6%"><input type="date" style="width:100%; height:var(--inputHeight)"></td>
+    <td style="width:10%"><input type="text" id="perforista" style="width:100%; height:var(--inputHeight)"></td>
+    <td style="width:6%"><input type="text" id="turno" style="width:100%; height:var(--inputHeight)"></td>
+    <td style="width:8%"><input type="text" id="unidad" style="width:100%; height:var(--inputHeight)"></td>
+    <td style="width:8%"><input type="text" id="maquina" style="width:100%; height:var(--inputHeight)"></td>
+  </tr>
+</table>
+
+   <!-- 🧪 Tabla técnica horizontal -->
+    <h3 style="font-size:8px; margin-bottom:4px"></h3>
+    <table border="0">
+      <thead>
+        <tr style="height:85px">
+          <th style="width:8%">Total tubería</th>
+          <th style="width:5%">Sobrante</th>
+          <th style="width:8%">Profundidad</th>
+          <th style="width:4%">Corrida</th>
+          <th style="width:4%">Testigo</th>
+          <th style="width:6.6%">Pérdida</th>
+          <th class="vertical-header" style="width:3%">Fracturado   </th>
+          <th class="vertical-header" style="width:3%">Semi C.</th>
+          <th class="vertical-header" style="width:3%">Compactado</th>
+          <th class="vertical-header" style="width:3%">Duro</th>
+          <th class="vertical-header" style="width:3%">Semi Duro</th>
+          <th class="vertical-header" style="width:3%">Suave</th>
+          <th style="width:6.6%">N°</th>
+          <th style="width:6.6%">Serie</th>
+          <th style="width:20%">Observaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+
+          <td><input type="text" style="height:var(--inputHeight)"></td>
+          <td><input type="text" style="height:var(--inputHeight)"></td>
+          <td><input type="text" style="height:var(--inputHeight)"></td>
+        </tr>
+         <tr>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+          <td><input type="number" style="height:var(--inputHeight)"></td>
+
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+          <td><input type="checkbox" style="height:var(--inputHeight); transform:scale(0.8)"></td>
+
+          <td><input type="text" style="height:var(--inputHeight)"></td>
+          <td><input type="text" style="height:var(--inputHeight)"></td>
+          <td><input type="text" style="height:var(--inputHeight)"></td>
+       
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+<script>
+  // PDF horizontal
+  document.getElementById("btnPDF").addEventListener("click", () => {
+    const { jsPDF } = window.jspdf;
+    const original = document.getElementById("reporte");
+    const clon = original.cloneNode(true);
+
+    clon.querySelectorAll("input, textarea").forEach(el => {
+  const div = document.createElement("div");
+
+  if (el.type === "checkbox") {
+    div.textContent = el.checked ? "✔" : "";
+  } else {
+    div.textContent = el.value || el.innerText;
+  }
+
+  div.style.border = "0px solid #ccc";
+  div.style.padding = "2px";
+  div.style.minHeight = "8px";
+  div.style.fontSize = "8px";
+  el.parentNode.replaceChild(div, el);
+});
+
+    clon.style.position = "absolute";
+    clon.style.left = "-9999px";
+    document.body.appendChild(clon);
+
+    html2canvas(clon, { scale: 2 }).then(canvas => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("l", "mm", "a4");
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const imgHeight = canvas.height * pageWidth / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pageWidth, imgHeight);
+      pdf.save("diario-perforacion.pdf");
+
+      document.body.removeChild(clon);
+    });
+  });
+
+  // Excel
+  document.getElementById("btnExcel").addEventListener("click", () => {
+    const wb = XLSX.utils.book_new();
+    const encabezados = [
+      "Máquina", "Turno", "Sondaje", "Inclinación", "Azimuth", "Programa",
+      "Diámetro", "Perforado", "Prof. Inicio", "Prof. Final", "Comentarios", "Perforista"
+    ];
+    const valores = [
+      document.getElementById("maquina")?.value || "",
+      document.getElementById("turno")?.value || "",
+    ];
+    const ws = XLSX.utils.aoa_to_sheet([encabezados, valores]);
+    XLSX.utils.book_append_sheet(wb, ws, "Diario Perforación");
+    XLSX.writeFile(wb, "diario-perforacion.xlsx");
+  });
+</script>
+
+<div id="botonAtras">
+  <button onclick="history.back()" style="padding:12px 24px; font-size:14px; background-color:#003366; color:white; border:none; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.2); cursor:pointer;">
+    Atrás
+  </button>
+</div>
+
+<style>
+  #botonAtras {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 9999;
+  }
+</style>
+</body>
+</html>
