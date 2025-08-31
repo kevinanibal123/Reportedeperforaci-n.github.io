@@ -108,7 +108,7 @@
 
    <!-- 🧭 GEOTEC bien pegado a la izquierda -->
   <div style="margin-right:auto">
-    <h2 style="font-size:20px; margin:0">GEOTEC</h2>
+    <h2 style="font-size:20px; margin:0; color:#FFD700" >GEOTEC</h2>
   </div>
   <!-- REPORTE DE GUARDIA centrado -->
    <div style="flex:1; text-align:center">
@@ -160,13 +160,14 @@
       <td><input id="sobrante" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
     </tr>
     <tr>
-      <td style="background:#dde6f3; font-weight:bold"><label for="prof_inicial">Profundidad al final del turno</label></td>
-      <td><input id="prof_inicial" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
-    </tr>
-    <tr>
-      <td style="background:#dde6f3; font-weight:bold"><label for="prof_final">Profundidad al inicio del turno</label></td>
-      <td><input id="prof_final" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
-    </tr>
+      <tr>
+  <td style="background:#dde6f3; font-weight:bold"><label for="prof_inicial">Profundidad al final del turno</label></td>
+  <td><input id="prof_inicial" type="number" style="width:100%; height:var(--inputHeight,16px)" readonly></td>
+</tr>
+<tr>
+  <td style="background:#dde6f3; font-weight:bold"><label for="prof_final">Profundidad inicial del turno</label></td>
+  <td><input id="prof_final" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
+</tr>
     <tr>
       <td style="background:#dde6f3; font-weight:bold"><label for="perforado">Perforado</label></td>
       <td><input id="perforado" type="number" style="width:100%; height:var(--inputHeight,16px)"></td>
@@ -177,6 +178,36 @@
     </tr>
   </table>
 </td>
+<script>
+  const profFinalInput = document.getElementById("prof_final");
+  const perforadoInput = document.getElementById("perforado");
+  const profInicialInput = document.getElementById("prof_inicial");
+
+  const calcularProfundidadFinal = () => {
+    const inicio = parseFloat(profFinalInput.value);
+    const perforado = parseFloat(perforadoInput.value);
+
+    if (!isNaN(inicio) && !isNaN(perforado)) {
+      const resultado = inicio + perforado;
+      profInicialInput.value = resultado.toFixed(2);
+      localStorage.setItem("prof_inicial", resultado.toFixed(2)); // Persistencia
+    } else {
+      profInicialInput.value = "";
+      localStorage.removeItem("prof_inicial");
+    }
+  };
+
+  // Restaurar valor al cargar
+  window.addEventListener("DOMContentLoaded", () => {
+    const guardado = localStorage.getItem("prof_inicial");
+    if (guardado !== null) {
+      profInicialInput.value = guardado;
+    }
+  });
+
+  profFinalInput.addEventListener("blur", calcularProfundidadFinal);
+  perforadoInput.addEventListener("blur", calcularProfundidadFinal);
+</script>
     <!-- Columna: Aditivos -->
 <td style="width:25%; padding-right:10px">
   <h3>Aditivos</h3>
@@ -560,7 +591,10 @@
     <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
     <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
     <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
-     
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    <tr><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="time" style="width:100%"></td><td><input type="number" style="width:100%"></td><td><input type="text" style="width:100%"></td><td><input type="text" style="width:100%"></td></tr>
+    
+
     <script>
   const actividades = {
   "DD101": { descripcion: "Abastecimiento Combustible", cobrable: false },
@@ -747,7 +781,9 @@
   "GE188": { descripcion: "Sellando Cuello Casing", cobrable: true },
   "GE189": { descripcion: "Trabajos de Soldadura", cobrable: false },
   "GE190": { descripcion: "Trabajos en Altura", cobrable: false },
-  "GE191": { descripcion: "Uso de Casing Puller", cobrable: true }
+  "GE191": { descripcion: "Uso de Casing Puller", cobrable: true },
+  "GEzzz": { descripcion: "Otras actividades", cobrable: false }
+  // Agregar mas actividades según sea necesario
 };
 
 document.querySelectorAll('table tbody tr').forEach(fila => {
@@ -782,6 +818,82 @@ document.querySelectorAll('table tbody tr').forEach(fila => {
   }
 });
 </script>
+<script>
+  const calcularHoras = () => {
+    const filas = document.querySelectorAll("tbody tr");
+
+    filas.forEach(fila => {
+      const inputs = fila.querySelectorAll("input");
+      const horaInicio = inputs[2];
+      const horaFinal = inputs[3];
+      const cantHoras = inputs[4];
+
+      if (horaInicio && horaFinal && cantHoras) {
+        const inicio = horaInicio.value;
+        const final = horaFinal.value;
+
+        if (inicio && final) {
+          const [h1, m1] = inicio.split(":").map(Number);
+          const [h2, m2] = final.split(":").map(Number);
+
+          const t1 = h1 * 60 + m1;
+          const t2 = h2 * 60 + m2;
+          const diff = t2 - t1;
+
+          if (diff >= 0) {
+            const horas = Math.floor(diff / 60);
+            const minutos = Math.round((diff % 60) * 100 / 60); // convierte minutos a base 100
+            const resultado = `${horas}.${minutos.toString().padStart(2, "0")}`;
+            cantHoras.value = resultado;
+          } else {
+            cantHoras.value = "";
+          }
+        } else {
+          cantHoras.value = "";
+        }
+      }
+    });
+  };
+
+  window.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("input[type='time']").forEach(input => {
+      input.addEventListener("blur", calcularHoras);
+    });
+  });
+</script>
+<script>
+  const guardarColores = () => {
+    const estado = [];
+    document.querySelectorAll("table tbody tr").forEach((fila, i) => {
+      const inputs = fila.querySelectorAll("input");
+      if (inputs.length >= 6) {
+        estado.push({
+          fila: i,
+          actividadColor: inputs[1].style.backgroundColor,
+          horaCobrableColor: inputs[5].style.backgroundColor
+        });
+      }
+    });
+    sessionStorage.setItem("coloresCargoTiempo", JSON.stringify(estado));
+  };
+
+  const restaurarColores = () => {
+    const estado = JSON.parse(sessionStorage.getItem("coloresCargoTiempo") || "[]");
+    document.querySelectorAll("table tbody tr").forEach((fila, i) => {
+      const inputs = fila.querySelectorAll("input");
+      const filaEstado = estado.find(e => e.fila === i);
+      if (filaEstado && inputs.length >= 6) {
+        inputs[1].style.backgroundColor = filaEstado.actividadColor;
+        inputs[5].style.backgroundColor = filaEstado.horaCobrableColor;
+      }
+    });
+  };
+
+  window.addEventListener("DOMContentLoaded", restaurarColores);
+
+  // Asegúrate que el botón "Siguiente" tenga este ID
+  document.getElementById("btnSiguiente")?.addEventListener("click", guardarColores);
+</script>
   </tbody>
 </table>
 
@@ -798,8 +910,35 @@ document.querySelectorAll('table tbody tr').forEach(fila => {
   white-space:pre-wrap;
   word-wrap:break-word;
   box-sizing:border-box;
-  outline:none;
-">
+  outline:none;">
+  <script>
+  const copiarComentarios = () => {
+    const filas = document.querySelectorAll("tbody tr");
+    const comentarios = document.getElementById("comentarios");
+    let resultado = "";
+
+    filas.forEach(fila => {
+      const inputs = fila.querySelectorAll("input");
+      const actividad = inputs[1]?.value?.trim();
+      const horas = parseFloat(inputs[4]?.value?.trim());
+
+      if (actividad && !isNaN(horas) && horas > 0) {
+        const horasFormateadas = Math.round(horas * 10) / 10;
+        resultado += `${actividad} (${horasFormateadas}h), `;
+      }
+    });
+
+    comentarios.innerText = resultado.trim().replace(/,\s*$/, "");
+  };
+
+  window.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("tbody input").forEach(input => {
+      input.addEventListener("blur", copiarComentarios);
+    });
+  });
+</script>
+
+
 </div>
 
 <!-- 👥 Personal en tabla -->
@@ -945,8 +1084,8 @@ document.querySelectorAll('table tbody tr').forEach(fila => {
     document.getElementById("hw")?.value || "",
     document.getElementById("hq")?.value || "",
     document.getElementById("perforado")?.value || "",
-    document.getElementById("prof_inicial")?.value || "",
     document.getElementById("prof_final")?.value || "",
+    document.getElementById("prof_inicial")?.value || "",
     document.getElementById("comentarios")?.innerText.trim() || "",
     document.getElementById("perforista")?.value || ""
   ];
